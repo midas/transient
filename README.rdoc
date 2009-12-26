@@ -1,6 +1,61 @@
 = transient
 
-Description goes here.
+http://github.com/midas/guilded
+
+
+== DESCRIPTION
+
+Provides an API for making any ActiveRecord object transient.
+
+
+== FEATURES
+
+* Convenience methods for transient objects, ie. current?, expired?, expire!, etc.
+* Callbacks for expiring current active record prior to creating new one where certain configured fields match.
+
+
+== REQUIREMENTS
+
+* ActiveRecord >= 2.3
+* ActiveSupport >= 2.3
+
+
+== INSTALL
+
+  gem sources -a http://gemcutter.org
+  sudo gem install transient
+
+
+== INSTALL FOR RAILS
+
+Add to environment file:
+
+  config.gem "transient", :version => '1.0.0', :source => 'http://gemcutter.org'
+
+Run:
+
+  sudo rake:gems:install
+
+
+== USAGE
+
+Call the macro from your ActiveRecord descendant class:
+
+  class User < ActiveRecord::Base
+    acts_as_transient
+  end
+
+Now you can use all of the convenience methods, expired?, current?, expire!, etc...
+
+Call the macro with a list of fields to use to lookup the current active record and expire it before saving the new one:
+
+  class ContactNumber < ActiveRecord::Base
+    acts_as_transient :single_active => %w(location user_id)
+  end
+
+This will try to find an existing contact number record where the location and user_id match the record being saved and expire
+the existing record before saving the new record.
+
 
 == Note on Patches/Pull Requests
  
@@ -12,6 +67,15 @@ Description goes here.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
 
-Copyright (c) 2009 Jason Harrelson. See LICENSE for details.
+== LICENSE
+
+Copyright (c) 2009 C. Jason Harrelson (midas)
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE

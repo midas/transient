@@ -6,10 +6,12 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "transient"
     gem.summary = %Q{Provides an API for making any ActiveRecord object transient.}
-    gem.description = %Q{Provides an API for making any ActiveRecord object transient.}
+    gem.description = %Q{Provides an API for making any ActiveRecord object transient.  In addition, provides functionality for models where only a single instance of the model can be current at one time.}
     gem.email = "jason@lookforwardenterprises.com"
     gem.homepage = "http://github.com/midas/transient"
-    gem.authors = ["Jason Harrelson"]
+    gem.authors = ["C. Jason Harrelson (midas)"]
+    gem.add_dependency "activerecord", ">= 2.3"
+    gem.add_dependency "activesupport", ">= 2.3"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
