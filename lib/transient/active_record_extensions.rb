@@ -33,7 +33,7 @@ module Transient
         public
 
         # Validates this record's effective dates occur in correct sequence (ie. effective_at is before 
-        # expiriing_at). 
+        # expiring_at). 
         #
         def validate 
           return unless self.effective_at && self.expiring_at
@@ -65,7 +65,7 @@ module Transient
           self.effective_at.to_datetime..self.expiring_at.to_datetime
         end
 
-        # Sets the range this record is efective within.
+        # Sets the range this record is effective within.
         #
         def effective_through=( value )
           self[:effective_at] = value.begin.to_datetime
