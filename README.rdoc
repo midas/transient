@@ -1,6 +1,6 @@
 = transient
 
-http://github.com/midas/guilded
+http://github.com/midas/transient
 
 
 == DESCRIPTION
