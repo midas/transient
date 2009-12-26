@@ -2,7 +2,7 @@ require File.expand_path( File.dirname(__FILE__) ) + '/../date_time_extensions'
 
 module Transient
   module ActiveRecordExtensions
-    def self.included( base )
+    def self.included( base ) #:nodoc:
       base.extend ActsMethods
     end
 
@@ -20,7 +20,7 @@ module Transient
     end
 
     module InstanceMethods
-      def self.included( includee ) # :nodoc
+      def self.included( includee ) #:nodoc:
         #includee.validates_presence_of :effective_at
         #includee.validates_presence_of :expiring_at
 
@@ -32,6 +32,9 @@ module Transient
 
         public
 
+        # Validates this record's effective dates occur in correct sequence (ie. effective_at is before 
+        # expiriing_at). 
+        #
         def validate 
           return unless self.effective_at && self.expiring_at
 
@@ -118,7 +121,7 @@ module Transient
     end
 
     module SingleActive
-      def self.included( includee ) # :nodoc
+      def self.included( includee ) #:nodoc:
         includee.before_create :expire_current_active
         
         private
