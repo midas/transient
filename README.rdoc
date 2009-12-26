@@ -11,7 +11,7 @@ Provides an API for making any ActiveRecord object transient.
 == FEATURES
 
 * Convenience methods for transient objects, ie. current?, expired?, expire!, etc.
-* Callbacks for expiring current active record prior to creating new one where certain configured fields match.
+* Callbacks for expiring current 'active' record prior to creating new one where certain configured fields match.
 
 
 == REQUIREMENTS
@@ -45,7 +45,7 @@ Call the macro from your ActiveRecord descendant class:
     acts_as_transient
   end
 
-Now you can use all of the convenience methods, expired?, current?, expire!, etc...
+Now you can use all of the convenience methods, expired?, current?, expire!, etc.  See the docs for more.
 
 Call the macro with a list of fields to use to lookup the current active record and expire it before saving the new one:
 
