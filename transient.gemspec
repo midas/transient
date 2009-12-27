@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
      "script/console",
      "spec/database.yml",
      "spec/date_time_extensions_spec.rb",
+     "spec/single_active_transient_shared_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
      "spec/transient/active_record_extensions_spec.rb",
@@ -44,6 +45,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Provides an API for making any ActiveRecord object transient.}
   s.test_files = [
     "spec/date_time_extensions_spec.rb",
+     "spec/single_active_transient_shared_spec.rb",
      "spec/spec_helper.rb",
      "spec/transient/active_record_extensions_spec.rb",
      "spec/transient_shared_spec.rb",

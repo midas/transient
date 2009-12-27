@@ -26,6 +26,13 @@ ActiveRecord::Schema.define :version => 1 do
     t.datetime :effective_at
     t.datetime :expiring_at
   end
+  
+  create_table :addresses, :force => true do |t|
+    t.string :street, :limit => 75
+    t.string :location, :limit => 20
+    t.datetime :effective_at
+    t.datetime :expiring_at
+  end
 end
 
 class User < ActiveRecord::Base
@@ -34,4 +41,8 @@ end
 
 class ContactNumber < ActiveRecord::Base
   acts_as_transient :single_active => %w(location)
+end
+
+class Address < ActiveRecord::Base
+  acts_as_transient :single_active => %w(location), :check_exists => %w(street location)
 end

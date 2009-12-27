@@ -11,6 +11,7 @@ module Transient
         include InstanceMethods unless included_modules.include?( InstanceMethods )
         options = args.extract_options!
         options.merge!( :single_active => false ) unless options[:single_active]
+        #options.merge!( :check_exists => false ) unless options[:check_exists]
         if options[:single_active] != false
           include SingleActive unless included_modules.include?( SingleActive )
           class_inheritable_accessor :transient_options
@@ -28,7 +29,7 @@ module Transient
         #includee.default(:expiring_at) { DateTime.end_of }
 
         includee.named_scope :current, lambda { { :conditions => ["effective_at <= ? AND (expiring_at IS NULL OR expiring_at > ?)",
-                                                                  DateTime.now, DateTime.now] } }
+                                                                  DateTime.now.utc, DateTime.now.utc] } }
 
         public
 
@@ -127,9 +128,16 @@ module Transient
         private
         
         def expire_current_active
+          #if self.transient_options[:check_exists]
+          #  exists_conditions = {}
+          #  self.transient_options[:check_exists].each { |attr| exists_conditions.merge!( attr.to_sym => attributes[attr] ) }
+          #  #cur = self.class.current.find( :first, :conditions => exists_conditions )
+          #  return true if self.class.current.exists?( exists_conditions )
+          #end
+          
           conditions = {}
           self.transient_options[:single_active].each { |attr| conditions.merge!( attr.to_sym => attributes[attr] ) }
-          old = self.class.current.find( :first, :conditions => { :location => self.location } )
+          old = self.class.current.find( :first, :conditions => conditions )
           old.expire! unless old.nil?
         end
       end
