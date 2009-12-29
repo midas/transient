@@ -13,6 +13,9 @@ Provides an API for making any ActiveRecord object transient.
 * Convenience methods for transient objects, ie. current?, expired?, expire!, etc.
 * Callbacks for expiring current 'active' record prior to creating new one where certain configured fields 
   match.  See the Transient::ActiveRecordExtensions::InstanceMethods docs for more information.
+* A callback to populate the expiring at field of a new record with DateTime.now unless a value was explicitly 
+  specified for the effective at field.
+* Automatically adds a presence validation for effective_at to the model.
 
 
 == REQUIREMENTS
@@ -31,7 +34,7 @@ Provides an API for making any ActiveRecord object transient.
 
 Add to environment file:
 
-  config.gem "transient", :version => '1.0.0', :source => 'http://gemcutter.org'
+  config.gem "transient", :version => '1.0.1', :source => 'http://gemcutter.org'
 
 Run:
 
@@ -39,6 +42,13 @@ Run:
 
 
 == USAGE
+
+Add the transient fields to your model:
+
+  def self.up
+    add_column :users, :effective_at, :datetime, :null => false
+    add_column :users, :expiring_at, :datetime
+  end
 
 Call the macro from your ActiveRecord descendant class:
 

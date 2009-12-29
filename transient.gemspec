@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{transient}
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["C. Jason Harrelson (midas)"]
-  s.date = %q{2009-12-27}
+  s.date = %q{2009-12-29}
   s.description = %q{Provides an API for making any ActiveRecord object transient.  In addition, provides functionality for models where only a single instance of the model can be current at one time.}
   s.email = %q{jason@lookforwardenterprises.com}
   s.extra_rdoc_files = [
