@@ -12,8 +12,9 @@ describe "Transient" do
   describe "having models descending from ActiveRecord" do
     describe "that are not single active" do
       before(:each) do
-        @instance = User.new( :name => 'John Smith', :effective_at => (DateTime.now - 1.days), :expiring_at => DateTime.end_of )
-        @instance.save!
+        @klass = User
+        @instance = @klass.create( :name => 'John Smith', :effective_at => (DateTime.now - 1.days), :expiring_at => DateTime.end_of )
+        @instance_no_dates = @klass.create( :name => 'Jack Smith' )
       end
 
       it_should_behave_like "Any transient"
@@ -30,34 +31,32 @@ describe "Transient" do
     describe "that are single active" do
       before(:each) do
         @klass = ContactNumber
-        @instance = @klass.new( :number => '012345678901', :location => 'home', :effective_at => (DateTime.now - 1.days) )
-        @instance.save!
+        @instance = @klass.create( :number => '012345678901', :location => 'home', :effective_at => (DateTime.now - 1.days) )
+        @instance_no_dates = @klass.create( :number => '012345678901', :location => 'home' )
       end
 
       it_should_behave_like "Any transient"
       it_should_behave_like "Any transient that is single active"      
 
       it "should expire the current active before saving a new one" do
-        @new_contact = ContactNumber.new( :number => '019876543210', :location => 'home', :effective_at => DateTime.now )
-        @new_contact.save!
+        @new_contact = ContactNumber.create( :number => '019876543210', :location => 'home', :effective_at => DateTime.now )
         @instance.reload
         @instance.expired?.should be_true
       end
     end
     
     describe "that are single active with check exists" do
-      before(:each) do
+      before :each do
         @klass = Address
-        @instance = @klass.new( :street => '26 street', :location => 'home', :effective_at => (DateTime.now - 1.days) )
-        @instance.save!
+        @instance = @klass.create( :street => '26 street', :location => 'home', :effective_at => (DateTime.now - 1.days) )
+        @instance_no_dates = @klass.create( :street => '26 street', :location => 'home' )
       end
 
       it_should_behave_like "Any transient"
       it_should_behave_like "Any transient that is single active"
 
       it "should expire the current active before saving a new one" do
-        @new_address = Address.new( :street => '27 street', :location => 'home', :effective_at => DateTime.now )
-        @new_address.save!
+        @new_address = Address.create( :street => '27 street', :location => 'home', :effective_at => DateTime.now )
         @instance.reload
         @instance.expired?.should be_true
       end

@@ -4,7 +4,7 @@ require 'date_time_extensions'
 require 'transient/active_record_extensions'
 
 module Transient
-  VERSION = '1.0.0'
+  VERSION = '1.0.1'
 end
 
 ActiveRecord::Base.send( :include, Transient::ActiveRecordExtensions ) if defined?( ActiveRecord::Base )

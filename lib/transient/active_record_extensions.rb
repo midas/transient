@@ -21,16 +21,21 @@ module Transient
     end
 
     module InstanceMethods
-      def self.included( includee ) #:nodoc:
-        #includee.validates_presence_of :effective_at
-        #includee.validates_presence_of :expiring_at
+      def self.included( base ) #:nodoc:
+        base.validates_presence_of :effective_at
+        #base.validates_presence_of :expiring_at
 
-        #includee.default(:effective_at) { DateTime.beginning_of }
-        #includee.default(:expiring_at) { DateTime.end_of }
-
-        includee.named_scope :current, lambda { { :conditions => ["effective_at <= ? AND (expiring_at IS NULL OR expiring_at > ?)",
+        base.named_scope :effective, lambda { { :conditions => ["effective_at <= ? AND (expiring_at IS NULL OR expiring_at > ?)",
                                                                   DateTime.now.utc, DateTime.now.utc] } }
 
+        base.before_validation_on_create :check_and_set_effective_at
+
+        protected
+        
+        def check_and_set_effective_at
+          self[:effective_at] = DateTime.now if self[:effective_at].nil?
+        end
+        
         public
 
         # Validates this record's effective dates occur in correct sequence (ie. effective_at is before 
@@ -46,18 +51,11 @@ module Transient
           super
         end
 
-        # The date this record becomes effective.  Returns DateTime.beginning_of for records that have a 
-        # nil value in the database.
-        #
-        def effective_at
-          return self[:effective_at].blank? ? DateTime.beginning_of : self[:effective_at]
-        end
-
         # The date this record expires.  Returns DateTime.end_of for records that have a 
         # nil value in the database.
         #
         def expiring_at
-          return self[:expiring_at].blank? ? DateTime.end_of : self[:expiring_at]
+          return self[:expiring_at].nil? ? DateTime.end_of : self[:expiring_at]
         end
 
         # The range this record is effective wihtin.
@@ -122,8 +120,8 @@ module Transient
     end
 
     module SingleActive
-      def self.included( includee ) #:nodoc:
-        includee.before_create :expire_current_active
+      def self.included( base ) #:nodoc:
+        base.before_create :expire_current_active
         
         private
         
@@ -137,7 +135,7 @@ module Transient
           
           conditions = {}
           self.transient_options[:single_active].each { |attr| conditions.merge!( attr.to_sym => attributes[attr] ) }
-          old = self.class.current.find( :first, :conditions => conditions )
+          old = self.class.effective.first( :conditions => conditions )
           old.expire! unless old.nil?
         end
       end
