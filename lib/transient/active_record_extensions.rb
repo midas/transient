@@ -33,7 +33,7 @@ module Transient
         protected
         
         def check_and_set_effective_at
-          self[:effective_at] = DateTime.now if self[:effective_at].nil?
+          self.effective_at = Time.zone.now if self.effective_at.nil?
         end
         
         public
@@ -54,8 +54,8 @@ module Transient
         # The date this record expires.  Returns DateTime.end_of for records that have a 
         # nil value in the database.
         #
-        def expiring_at
-          return self[:expiring_at].nil? ? DateTime.end_of : self[:expiring_at]
+        def expires_at
+          return self.expiring_at.nil? ? DateTime.end_of : self.expiring_at
         end
 
         # The range this record is effective wihtin.
@@ -67,8 +67,8 @@ module Transient
         # Sets the range this record is effective within.
         #
         def effective_through=( value )
-          self[:effective_at] = value.begin.to_datetime
-          self[:expiring_at] = value.end.to_datetime
+          self.effective_at = value.begin.to_datetime
+          self.expiring_at = value.end.to_datetime
         end
 
         # Returns true if this record's exiring_at date is equivalent to DateTime.end_of, otherwise false.

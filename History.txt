@@ -1,3 +1,8 @@
+= 1.0.2 2010--3-18
+
+* Fixed bug where the effective_at date when implicitly set was not UTC.
+
+
 = 1.0.1 2009-12-29
 
 * Added call back to populate effective_at with DateTime.now if it is not explicitly set to something else.
