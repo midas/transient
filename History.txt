@@ -1,6 +1,8 @@
-= 1.0.2 2010--3-18
+= 1.0.2 2010-03-18
 
 * Fixed bug where the effective_at date when implicitly set was not UTC.
+* Started using the method calls (self.effective_at) as opposed to the self[:effective_at] whenever possible.
+* Renamed the effective_at method to expires_at.
 
 
 = 1.0.1 2009-12-29
