@@ -31,27 +31,27 @@ module Transient
         base.before_validation_on_create :check_and_set_effective_at
 
         protected
-        
+
         def check_and_set_effective_at
           self.effective_at = Time.zone.now if self.effective_at.nil?
         end
-        
+
         public
 
-        # Validates this record's effective dates occur in correct sequence (ie. effective_at is before 
-        # expiring_at). 
+        # Validates this record's effective dates occur in correct sequence (ie. effective_at is before
+        # expiring_at).
         #
-        def validate 
+        def validate
           return unless self.effective_at && self.expiring_at
 
-          unless self.effective_at.to_datetime <= self.expiring_at.to_datetime
+          unless self.effective_at.to_datetime <= self.expires_at.to_datetime
             self.errors.add( :effective_through, "effective at should be earlier than expiring at" )
           end
 
-          super
+          super unless self.class.respond_to?( :where ) # are we ActiveRecord 3.0.0?
         end
 
-        # The date this record expires.  Returns DateTime.end_of for records that have a 
+        # The date this record expires.  Returns DateTime.end_of for records that have a
         # nil value in the database.
         #
         def expires_at
@@ -61,7 +61,7 @@ module Transient
         # The range this record is effective wihtin.
         #
         def effective_through
-          self.effective_at.to_datetime..self.expiring_at.to_datetime
+          self.effective_at.to_datetime..self.expires_at.to_datetime
         end
 
         # Sets the range this record is effective within.
@@ -86,7 +86,7 @@ module Transient
         # Returns true if this record is expired, otherwise false.
         #
         def expired?
-          self.expiring_at.to_datetime < DateTime.now
+          self.expires_at.to_datetime < DateTime.now
         end
 
         # Expires and saves this record.
@@ -98,7 +98,7 @@ module Transient
           after_expire! if self.respond_to?( :after_expire! )
         end
 
-        # Returns true if this record is not yet effective, but will become effective at some point in the 
+        # Returns true if this record is not yet effective, but will become effective at some point in the
         # future, otherwise false.
         #
         def future?
@@ -122,9 +122,9 @@ module Transient
     module SingleActive
       def self.included( base ) #:nodoc:
         base.before_create :expire_current_active
-        
+
         private
-        
+
         def expire_current_active
           #if self.transient_options[:check_exists]
           #  exists_conditions = {}
@@ -132,7 +132,7 @@ module Transient
           #  #cur = self.class.current.find( :first, :conditions => exists_conditions )
           #  return true if self.class.current.exists?( exists_conditions )
           #end
-          
+
           conditions = {}
           self.transient_options[:single_active].each { |attr| conditions.merge!( attr.to_sym => attributes[attr] ) }
           old = self.class.effective.first( :conditions => conditions )
