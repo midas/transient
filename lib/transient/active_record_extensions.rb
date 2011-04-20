@@ -30,7 +30,7 @@ module Transient
           def scope_method_name
             is_active_record_3? ?
               :scope :
-              :name_scope
+              :named_scope
           end
         end
 
