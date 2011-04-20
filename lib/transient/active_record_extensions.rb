@@ -22,11 +22,24 @@ module Transient
 
     module InstanceMethods
       def self.included( base ) #:nodoc:
+        base.instance_eval do
+          def is_active_record_3?
+            respond_to? :where
+          end
+
+          def scope_method_name
+            is_active_record_3? ?
+              :scope :
+              :name_scope
+          end
+        end
+
         base.validates_presence_of :effective_at
         #base.validates_presence_of :expiring_at
 
-        base.named_scope :effective, lambda { { :conditions => ["effective_at <= ? AND (expiring_at IS NULL OR expiring_at > ?)",
-                                                                  DateTime.now.utc, DateTime.now.utc] } }
+        base.send( base.scope_method_name, :effective,
+                                           lambda { { :conditions => ["effective_at <= ? AND (expiring_at IS NULL OR expiring_at > ?)",
+                                                                      DateTime.now.utc, DateTime.now.utc] } } )
 
         base.before_validation_on_create :check_and_set_effective_at
 
@@ -48,7 +61,7 @@ module Transient
             self.errors.add( :effective_through, "effective at should be earlier than expiring at" )
           end
 
-          super unless self.class.respond_to?( :where ) # are we ActiveRecord 3.0.0?
+          super unless self.class.is_active_record_3?
         end
 
         # The date this record expires.  Returns DateTime.end_of for records that have a
