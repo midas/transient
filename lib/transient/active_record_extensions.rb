@@ -41,7 +41,11 @@ module Transient
                                            lambda { { :conditions => ["effective_at <= ? AND (expiring_at IS NULL OR expiring_at > ?)",
                                                                       DateTime.now.utc, DateTime.now.utc] } } )
 
-        base.before_validation_on_create :check_and_set_effective_at
+        if base.is_active_record_3?
+          base.before_validation :check_and_set_effective_at, :on => :create
+        else
+          base.before_validation_on_create :check_and_set_effective_at
+        end
 
         protected
 
