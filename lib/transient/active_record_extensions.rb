@@ -58,7 +58,7 @@ module Transient
         # Validates this record's effective dates occur in correct sequence (ie. effective_at is before
         # expiring_at).
         #
-        def validate
+        def effective_at_earlier_than_expiring_at
           return unless self.effective_at && self.expiring_at
 
           unless self.effective_at.to_datetime <= self.expires_at.to_datetime
@@ -67,6 +67,7 @@ module Transient
 
           super unless self.class.is_active_record_3?
         end
+        base.validate :effective_at_earlier_than_expiring_at
 
         # The date this record expires.  Returns DateTime.end_of for records that have a
         # nil value in the database.
