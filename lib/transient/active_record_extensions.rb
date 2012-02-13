@@ -1,5 +1,3 @@
-require File.expand_path( File.dirname(__FILE__) ) + '/../date_time_extensions'
-
 module Transient
   module ActiveRecordExtensions
     def self.included( base ) #:nodoc:
