@@ -20,8 +20,7 @@ Provides an API for making any ActiveRecord object transient.
 
 == REQUIREMENTS
 
-* ActiveRecord >= 2.3
-* ActiveSupport >= 2.3
+* Rails >= 3.0.0
 
 
 == INSTALL
@@ -32,13 +31,13 @@ Provides an API for making any ActiveRecord object transient.
 
 == INSTALL FOR RAILS
 
-Add to environment file:
+Add to Gemfile:
 
-  config.gem "transient", :version => '1.0.1', :source => 'http://gemcutter.org'
+  gem "transient"
 
 Run:
 
-  sudo rake:gems:install
+  bundle install
 
 
 == USAGE
