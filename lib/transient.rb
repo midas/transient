@@ -7,4 +7,8 @@ module Transient
 
 end
 
-ActiveRecord::Base.send( :include, Transient::ActiveRecordExtensions ) if defined?( ActiveRecord::Base )
+begin
+  require 'transient/railtie' if /3\.\d+\.\d+/.match( Rails.version )
+rescue
+  ActiveRecord::Base.send( :include, Transient::ActiveRecordExtensions ) if defined?( ActiveRecord::Base )
+end

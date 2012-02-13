@@ -20,8 +20,7 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
-  s.add_development_dependency "activerecord", "3.1.0"
-  s.add_development_dependency "activesupport", "3.1.0"
+  s.add_development_dependency "rails", ">= 3.0.0"
   s.add_development_dependency "ruby-debug"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "guard"
@@ -29,6 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'growl'
 	s.add_development_dependency 'guard-rspec'
 
-  s.add_runtime_dependency "activerecord"
-  s.add_runtime_dependency "activesupport"
+  s.add_runtime_dependency "rails", ">= 3.0.0"
 end
