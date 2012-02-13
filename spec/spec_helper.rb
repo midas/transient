@@ -1,13 +1,15 @@
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+# $LOAD_PATH.unshift(File.dirname(__FILE__))
+# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
 require 'active_record'
+require 'bundler/setup'
 require 'transient'
-require 'spec'
-require 'spec/autorun'
+# require 'spec'
 
-Spec::Runner.configure do |config|
-  
+RSpec.configure do |config|
+
+  config.mock_with :rspec
+
 end
 
 ActiveRecord::Base.configurations = YAML::load( IO.read( File.dirname(__FILE__) + '/database.yml' ) )
@@ -26,7 +28,7 @@ ActiveRecord::Schema.define :version => 1 do
     t.datetime :effective_at
     t.datetime :expiring_at
   end
-  
+
   create_table :addresses, :force => true do |t|
     t.string :street, :limit => 75
     t.string :location, :limit => 20
