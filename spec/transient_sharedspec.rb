@@ -1,6 +1,7 @@
-require File.expand_path( File.dirname(__FILE__) + '/spec_helper' )
+require 'spec_helper'
 
 shared_examples_for "Any transient" do
+
   it "should be Transient" do
     @instance.should respond_to(:effective_at)
     @instance.should respond_to(:expiring_at)
@@ -54,7 +55,7 @@ shared_examples_for "Any transient" do
     @instance.should_not be_past
     @instance.should be_future
   end
-  
+
   it "should respond to :effective" do
     @klass.respond_to?( :effective ).should be_true
   end
@@ -64,13 +65,14 @@ shared_examples_for "Any transient" do
     @instance.should_receive(:after_expire!)
     @instance.expire!
   end
-  
+
   it "should set effective_at to now if it was not explicitly set to something else" do
      @instance_no_dates.effective_at.should_not be_nil
   end
-  
+
   it "should not allow records without an effective_at date to be saved" do
      @instance_no_dates.effective_at = nil
      @instance_no_dates.save.should be_false
   end
+
 end
