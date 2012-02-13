@@ -14,7 +14,7 @@ module Transient
         #options.merge!( :check_exists => false ) unless options[:check_exists]
         if options[:single_active] != false
           include SingleActive unless included_modules.include?( SingleActive )
-          class_inheritable_accessor :transient_options
+          class_attribute :transient_options
           self.transient_options = options
         end
       end
